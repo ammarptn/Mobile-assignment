@@ -63,7 +63,7 @@ dependencies {
     def epoxyVersion = "5.0.0-beta05"
 
     implementation "com.airbnb.android:epoxy:$epoxyVersion"
-    annotationProcessor "com.airbnb.android:epoxy-processor:$epoxyVersion"
+    kapt "com.airbnb.android:epoxy-processor:$epoxyVersion"
 
 
     implementation "androidx.core:core-ktx:1.7.0"
