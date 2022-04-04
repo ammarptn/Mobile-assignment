@@ -13,7 +13,7 @@ abstract class SearchResultEpoxyModel : ViewBindingEpoxyModelWithHolder<ItemSear
     open var title: String? = null
 
     @EpoxyAttribute
-    open var textQuery: String? = null
+    open var subtitle: String? = null
 
     @EpoxyAttribute
     open var onClickSearchResult: (() -> Unit)? = null
@@ -22,8 +22,9 @@ abstract class SearchResultEpoxyModel : ViewBindingEpoxyModelWithHolder<ItemSear
     override fun ItemSearchResultBinding.bind() {
 
         textViewTitle.text = title
+        textViewSubTitle.text = subtitle
 
-        textViewTitle.setOnClickListener {
+        root.setOnClickListener {
             onClickSearchResult?.invoke()
         }
 

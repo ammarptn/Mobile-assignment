@@ -9,10 +9,12 @@ class DataCityListMapper @Inject constructor() {
     fun map(cityEntity: List<CityEntityItem>): List<DomainCity> {
         return cityEntity.mapNotNull {
             it.name?.let { name ->
-                it.coord?.let { coordinate ->
-                    coordinate.lat?.let { lat ->
-                        coordinate.lon?.let { lon ->
-                            DomainCity(name, lat, lon)
+                it.country?.let { country ->
+                    it.coord?.let { coordinate ->
+                        coordinate.lat?.let { lat ->
+                            coordinate.lon?.let { lon ->
+                                DomainCity(name, country, lat, lon)
+                            }
                         }
                     }
                 }

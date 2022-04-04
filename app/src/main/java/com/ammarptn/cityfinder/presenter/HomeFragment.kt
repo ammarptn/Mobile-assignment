@@ -1,5 +1,7 @@
 package com.ammarptn.cityfinder.presenter
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -47,8 +49,10 @@ class HomeFragment : Fragment(), SearchResultController.AddOnClickListener {
         viewModel.isLoadingLiveData.observe(viewLifecycleOwner) {
             if (it) {
                 binding.layoutLoading.visibility = View.VISIBLE
+                binding.textViewSuggestSearch.visibility = View.GONE
             } else {
                 binding.layoutLoading.visibility = View.GONE
+                binding.textViewSuggestSearch.visibility = View.VISIBLE
             }
         }
 
@@ -58,19 +62,31 @@ class HomeFragment : Fragment(), SearchResultController.AddOnClickListener {
         }
 
         lifecycleScope.launchWhenStarted {
-            viewModel.resultFlow.debounce(500).collectLatest {
+            viewModel.resultFlow.debounce(timeoutMillis = 500).collectLatest {
                 searchResultController.setData(it)
                 binding.progressBarSearchCity.visibility = View.GONE
+
+                if (it.isNullOrEmpty() && binding.editTextSearchBox.text.isEmpty()&&viewModel.isLoadingLiveData.value == false) {
+                    binding.textViewSuggestSearch.visibility = View.VISIBLE
+                } else {
+                    binding.textViewSuggestSearch.visibility = View.GONE
+                }
             }
         }
 
         return binding.root
     }
 
-    override fun onClickSearchResult(position: Int) {
+    override fun onClickSearchResult(cityName: String, coordinate: Pair<Double, Double>) {
+
+
+        val gmmIntentUri =
+            Uri.parse("geo:${coordinate.first},${coordinate.second}?q=" + Uri.encode(cityName))
+        val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
+        startActivity(mapIntent)
+
 
     }
-
 
 
 }
