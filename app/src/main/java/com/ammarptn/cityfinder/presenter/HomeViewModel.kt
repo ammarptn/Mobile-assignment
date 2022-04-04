@@ -8,6 +8,8 @@ import com.ammarptn.cityfinder.domain.model.DomainCity
 import com.ammarptn.cityfinder.domain.usecase.GetAllCityUseCase
 import com.ammarptn.cityfinder.presenter.mapper.PresenterCityMapper
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -16,6 +18,10 @@ class HomeViewModel @Inject constructor(
     var getAllCityUseCase: GetAllCityUseCase,
     var presenterCityMapper: PresenterCityMapper
 ) : ViewModel() {
+
+    private val _resultFlow = MutableStateFlow<List<String>?>(emptyList())
+    val resultFlow = _resultFlow.asStateFlow()
+
 
     private var cityList: MutableMap<String, DomainCity>? = null
     var resultList: MutableLiveData<List<String>?> = MutableLiveData<List<String>?>()
@@ -41,15 +47,27 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun filterList(query: String) {
+    fun filterList(query: String, list: MutableMap<String, DomainCity>?): List<String>? {
+
         val result =
-            cityList?.filterKeys { key -> key.startsWith(query.lowercase()) }?.toList()?.take(100)
+            list?.filterKeys { key -> key.startsWith(query.lowercase()) }?.toList()?.sortedBy { it.second.cityName }
 
         Log.d(
             "HomeViewModel",
             "getCountryList: ma" + result?.size
         )
-        resultList.value = result?.map { it.second.cityName }
+        return result?.map { it.second.cityName }
     }
+
+    fun filterCityList(query: String) {
+        viewModelScope.launch {
+            if (query.isEmpty()) {
+                _resultFlow.emit(null)
+            } else {
+                _resultFlow.emit(filterList(query, cityList))
+            }
+        }
+    }
+
 
 }

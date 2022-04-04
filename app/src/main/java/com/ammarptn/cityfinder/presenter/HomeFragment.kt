@@ -1,15 +1,19 @@
 package com.ammarptn.cityfinder.presenter
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.ammarptn.cityfinder.databinding.HomeFragmentBinding
 import com.ammarptn.cityfinder.presenter.epoxy.controller.SearchResultController
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.debounce
 import javax.inject.Inject
 
 
@@ -55,7 +59,14 @@ class HomeFragment : Fragment(), SearchResultController.AddOnClickListener {
         }
 
         binding.editTextSearchBox.addTextChangedListener {
-            viewModel.filterList(it.toString())
+            viewModel.filterCityList(it.toString())
+        }
+
+        lifecycleScope.launchWhenStarted {
+            viewModel.resultFlow.debounce(500).collectLatest {
+                Log.d("HomeFragment", "onCreateView: $it")
+                searchResultController.setData(it)
+            }
         }
 
         return binding.root
