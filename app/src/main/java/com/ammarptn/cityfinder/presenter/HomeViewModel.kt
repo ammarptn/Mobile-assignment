@@ -19,6 +19,7 @@ class HomeViewModel @Inject constructor(
     var presenterCityMapper: PresenterCityMapper
 ) : ViewModel() {
 
+    // this flow will help debounce the search action every time user type something on the search box
     private val _resultFlow = MutableStateFlow<List<SearchResultHolder>?>(emptyList())
     val resultFlow = _resultFlow.asStateFlow()
 
@@ -47,6 +48,10 @@ class HomeViewModel @Inject constructor(
         list: MutableMap<String, DomainCity>?
     ): List<SearchResultHolder>? {
 
+        // the whole data is already put in the map, this will help speed up the query time by referring to the key
+        // I also use city name as they key
+        // then find the key that start with the text of user input
+        // after that, sort it in alphabets order
         val result =
             list?.filterKeys { key -> key.startsWith(query.lowercase()) }?.toList()
                 ?.sortedBy { it.second.cityName }

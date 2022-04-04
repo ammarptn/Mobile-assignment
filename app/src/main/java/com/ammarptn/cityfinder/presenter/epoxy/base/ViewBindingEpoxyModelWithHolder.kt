@@ -8,7 +8,8 @@ import com.airbnb.epoxy.EpoxyModelWithHolder
 import java.lang.reflect.Method
 import java.lang.reflect.ParameterizedType
 import java.util.concurrent.ConcurrentHashMap
-
+/*this is the template that provided by Epoxy developer
+* which will help to use view-binding with epoxy */
 abstract class ViewBindingEpoxyModelWithHolder<in T : ViewBinding> :
     EpoxyModelWithHolder<ViewBindingHolder>() {
 

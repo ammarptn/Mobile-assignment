@@ -66,7 +66,7 @@ class HomeFragment : Fragment(), SearchResultController.AddOnClickListener {
                 searchResultController.setData(it)
                 binding.progressBarSearchCity.visibility = View.GONE
 
-                if (it.isNullOrEmpty() && binding.editTextSearchBox.text.isEmpty()&&viewModel.isLoadingLiveData.value == false) {
+                if (it.isNullOrEmpty() && binding.editTextSearchBox.text.isEmpty() && viewModel.isLoadingLiveData.value == false) {
                     binding.textViewSuggestSearch.visibility = View.VISIBLE
                 } else {
                     binding.textViewSuggestSearch.visibility = View.GONE
@@ -78,7 +78,6 @@ class HomeFragment : Fragment(), SearchResultController.AddOnClickListener {
     }
 
     override fun onClickSearchResult(cityName: String, coordinate: Pair<Double, Double>) {
-
 
         val gmmIntentUri =
             Uri.parse("geo:${coordinate.first},${coordinate.second}?q=" + Uri.encode(cityName))
