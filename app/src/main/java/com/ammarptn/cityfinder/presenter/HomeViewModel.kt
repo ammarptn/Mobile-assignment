@@ -24,7 +24,6 @@ class HomeViewModel @Inject constructor(
 
 
     private var cityList: MutableMap<String, DomainCity>? = null
-    var resultList: MutableLiveData<List<String>?> = MutableLiveData<List<String>?>()
 
     var isLoadingLiveData = MutableLiveData(false)
 

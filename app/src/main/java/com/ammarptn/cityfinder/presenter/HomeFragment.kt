@@ -44,11 +44,6 @@ class HomeFragment : Fragment(), SearchResultController.AddOnClickListener {
 
         searchResultController.setListener(this)
 
-
-        viewModel.resultList.observe(viewLifecycleOwner) {
-            searchResultController.setData(it)
-        }
-
         viewModel.isLoadingLiveData.observe(viewLifecycleOwner) {
             if (it) {
                 binding.layoutLoading.visibility = View.VISIBLE
