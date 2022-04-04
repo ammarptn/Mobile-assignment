@@ -1,7 +1,6 @@
 package com.ammarptn.cityfinder.presenter
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -60,12 +59,13 @@ class HomeFragment : Fragment(), SearchResultController.AddOnClickListener {
 
         binding.editTextSearchBox.addTextChangedListener {
             viewModel.filterCityList(it.toString())
+            binding.progressBarSearchCity.visibility = View.VISIBLE
         }
 
         lifecycleScope.launchWhenStarted {
             viewModel.resultFlow.debounce(500).collectLatest {
-                Log.d("HomeFragment", "onCreateView: $it")
                 searchResultController.setData(it)
+                binding.progressBarSearchCity.visibility = View.GONE
             }
         }
 
@@ -76,9 +76,6 @@ class HomeFragment : Fragment(), SearchResultController.AddOnClickListener {
 
     }
 
-    override fun onResume() {
-        super.onResume()
-    }
 
 
 }
