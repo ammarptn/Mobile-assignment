@@ -43,7 +43,7 @@ class HomeViewModel @Inject constructor(
 
     fun filterList(query: String) {
         val result =
-            cityList?.filterKeys { key -> key.contains(query.lowercase()) }?.toList()?.take(100)
+            cityList?.filterKeys { key -> key.startsWith(query.lowercase()) }?.toList()?.take(100)
 
         Log.d(
             "HomeViewModel",
