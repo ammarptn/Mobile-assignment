@@ -4,12 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.ammarptn.cityfinder.databinding.HomeFragmentBinding
 import com.ammarptn.cityfinder.presenter.epoxy.controller.SearchResultController
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
+
 
 @AndroidEntryPoint
 class HomeFragment : Fragment(), SearchResultController.AddOnClickListener {
@@ -44,6 +46,18 @@ class HomeFragment : Fragment(), SearchResultController.AddOnClickListener {
             searchResultController.setData(it)
         }
 
+        viewModel.isLoadingLiveData.observe(viewLifecycleOwner) {
+            if (it) {
+                binding.layoutLoading.visibility = View.VISIBLE
+            } else {
+                binding.layoutLoading.visibility = View.GONE
+            }
+        }
+
+        binding.editTextSearchBox.addTextChangedListener {
+            viewModel.filterList(it.toString())
+        }
+
         return binding.root
     }
 
@@ -53,7 +67,6 @@ class HomeFragment : Fragment(), SearchResultController.AddOnClickListener {
 
     override fun onResume() {
         super.onResume()
-        viewModel.getCountryList()
     }
 
 
